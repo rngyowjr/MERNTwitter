@@ -6,7 +6,7 @@ const users = require("./routes/api/users");
 const tweets = require("./routes/api/tweets");
 const User = require("./models/User");
 const bodyParser = require("body-parser");
-
+const passport = require('passport');
 
 mongoose
     .connect(db, { useNewUrlParser: true })
@@ -19,15 +19,18 @@ app.use(bodyParser.urlencoded({
 
 app.use(bodyParser.json());
 
-app.get("/", (req, res) => {
-    const user = new User({
-        handle: "tim",
-        email: "tim@gmail.com",
-        password: "timtimtim"
-    });
-    user.save();
-    res.send("Hello a/A!")
-});
+app.use(passport.initialize());
+require('./confg/passport')(passport);
+
+// app.get("/", (req, res) => {
+//     const user = new User({
+//         handle: "tim",
+//         email: "tim@gmail.com",
+//         password: "timtimtim"
+//     });
+//     user.save();
+//     res.send("Hello a/A!")
+// });
 
 app.use("/api/users", users);
 app.use("/api/tweets", tweets);
